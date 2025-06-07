@@ -1,33 +1,40 @@
 # Проект 3-го спринта
 
-### Описание
-Репозиторий предназначен для сдачи проекта 3-го спринта
 
-### Как работать с репозиторием
-1. В вашем GitHub-аккаунте автоматически создастся репозиторий `de-project-sprint-3` после того, как вы привяжете свой GitHub-аккаунт на Платформе.
-2. Скопируйте репозиторий на свой локальный компьютер, в качестве пароля укажите ваш `Access Token` (получить нужно на странице [Personal Access Tokens](https://github.com/settings/tokens)):
-	* `git clone https://github.com/{{ username }}/de-project-sprint-3.git`
-3. Перейдите в директорию с проектом: 
-	* `cd de-project-sprint-3`
-4. Выполните проект и сохраните получившийся код в локальном репозитории:
-	* `git add .`
-	* `git commit -m 'my best commit'`
-5. Обновите репозиторий в вашем GutHub-аккаунте:
-	* `git push origin main`
+### Этап 1
+1. Добавим новое поле в таблицы staging.user_order_log и mart.f_sales 
 
-### Структура репозитория
-1. Папка `migrations` хранит файлы миграции. Файлы миграции должны быть с расширением `.sql` и содержать SQL-скрипт обновления базы данных.
-2. В папке `src` хранятся все необходимые исходники: 
-    * Папка `dags` содержит DAG's Airflow.
+	* `ALTER TABLE staging.user_order_log
+ADD COLUMN status varchar(15) DEFAULT 'shipped';`
 
-### Как запустить контейнер
-Запустите локально команду:
+     *`ALTER TABLE mart.f_sales 
+ADD COLUMN status varchar(15) DEFAULT 'shipped';`
 
-```
-docker run -d --rm -p 3000:3000 -p 15432:5432 --name=de-project-sprint-3-server cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest
-```
+2. Заполнение таблицы mart.f_sales с помощью [mart.f_sales.sql] ()
 
-После того как запустится контейнер, у вас будут доступны:
-1. Visual Studio Code
-2. Airflow
-3. Database
+### Этап 2
+
+
+1. Создание витрины mart.f_customer_retention
+
+* `create table if not exists mart.f_customer_retention (
+new_customers_count INT,
+returning_customers_count INT,
+refunded_customer_count INT,
+period_name VARCHAR(15) default 'weekly',
+period_id INT,
+item_id INT,
+new_customers_revenue numeric(10,2),
+returning_customers_revenue numeric(10,2),
+customers_refunded INT);`
+
+2. Заполнене витрины mart.f_customer_retention с помощью [mart.f_customer_retention.sql] ()
+
+3. Добавление в DAG новой функции:
+
+   * update_f_customer_retention = PostgresOperator(
+   * task_id='update_f_customer_retention',
+   * postgres_conn_id=postgres_conn_id,
+   * sql="sql/mart.f_customer_retention.sql")
+   
+   Итоговый [DAG] ()
