@@ -14,7 +14,7 @@ ALTER TABLE mart.f_sales
 ADD COLUMN status varchar(15) DEFAULT 'shipped';
 ```
 
-2. Заполнение таблицы mart.f_sales с помощью [mart.f_sales.sql]([https://www.google.com "Сайт Google"](https://github.com/Mirabila/de-project-sprint-3/blob/main/migrations/sql/mart.f_sales.sql)
+2. Заполнение таблицы mart.f_sales с помощью [mart.f_sales.sql](https://github.com/Mirabila/de-project-sprint-3/blob/main/migrations/sql/mart.f_sales.sql)
 
 ### Этап 2
 
